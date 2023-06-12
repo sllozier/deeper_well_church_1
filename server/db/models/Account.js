@@ -8,6 +8,20 @@ const JWT = process.env.TOKEN;
 const SALT_ROUNDS = 5;
 
 const Account = db.define("account", {
+  fName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: true,
+    },
+  },
+  lName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: true,
+    },
+  },
   username: {
     type: Sequelize.STRING,
     unique: true,
@@ -25,18 +39,36 @@ const Account = db.define("account", {
       notEmpty: true,
     },
   },
-  firstName: {
-    type: Sequelize.STRING,
+  userType: {
+    type: Sequelize.ENUM("ADMIN", "WRITER", "USER"),
+    defaultValue: "USER",
     allowNull: false,
-    validate: {
-      notEmpty: true,
+  },
+  isAdmin: {
+    type: Sequelize.VIRTUAL,
+    get() {
+      return this.userType === "ADMIN";
     },
   },
-  lastName: {
+  isWriter: {
+    type: Sequelize.VIRTUAL,
+    get() {
+      return this.userType === "WRITER";
+    },
+  },
+  isUser: {
+    type: Sequelize.VIRTUAL,
+    get() {
+      return this.userType === "USER";
+    },
+  },
+  bio: {
+    type: Sequelize.TEXT,
+  },
+  profileImg: {
     type: Sequelize.STRING,
-    allowNull: false,
     validate: {
-      notEmpty: true,
+      isUrl: true,
     },
   },
 });

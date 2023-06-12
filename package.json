@@ -1,12 +1,13 @@
 {
-    "name": "create-react-boilerplate-sllozier",
-    "version": "0.0.8",
-    "bin": {
-      "create-boilerplate": "./bin/create-app.js"
+    "name": "deeper_well_1",
+    "version": "0.0.1",
+    "description": "First example of Deeper Well Church site",
+    "engines": {
+        "node": "19.x"
     },
-    "description": "React boilerplate that builds from webpack but no bulma added for fullstack app.",
     "main": "webpack.config.js",
     "scripts": {
+        "lint": "./node_modules/.bin/eslint",
         "build": "webpack",
         "build:dev": "npm run build -- --watch --mode=development",
         "seed": "node server/db/seed",
@@ -14,27 +15,21 @@
         "start:dev": "npm run build:dev & npm run start-server & npm run css-watch",
         "start:dev:logger": "LOGGING=true npm run start:dev",
         "start:dev:seed": "SEED=true npm run start:dev",
-        "build:watch": "webpack -w",
         "start-server": "nodemon server -e html,js,scss --ignore public --ignore client",
         "test:dev": "npm run test -- --watch",
         "css-build": "webpack --mode production",
         "css-watch": "npm run css-build -- --watch"
     },
-    "keywords": [
-        "boilerplate",
-        "fullstack",
-        "webpack",
-        "noBulma"
-    ],
     "author": "sllozier",
     "license": "MIT",
-    "homepage": "https://github.com/sllozier/create-react-boilerplate",
+    "homepage": "",
     "repository": {
         "type": "git",
-        "url": "https://github.com/sllozier/create-react-boilerplate.git"
-      },
-      "bugs": "https://github.com/sllozier/create-react-boilerplate/issues",
+        "url": "https://github.com/sllozier/deeper_well_church_1.git"
+    },
+    "bugs": "https://github.com/sllozier/deeper_well_church_1/issues",
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^6.4.0",
         "@reduxjs/toolkit": "^1.8.6",
         "axios": "^0.27.2",
         "bcrypt": "^5.0.1",
@@ -64,11 +59,15 @@
         "@babel/preset-stage-2": "^7.8.3",
         "@babel/register": "^7.12.10",
         "babel-loader": "8.2.5",
-        "css-loader": "^6.7.3",
+        "bulma": "^0.9.4",
+        "css-loader": "^6.8.1",
         "dotenv-webpack": "^8.0.1",
-        "mini-css-extract-plugin": "^2.7.5",
-        "style-loader": "^3.3.2",
-        "webpack": "^5.79.0",
+        "extract-text-webpack-plugin": "^4.0.0-beta.0",
+        "mini-css-extract-plugin": "^2.7.6",
+        "node-sass": "^9.0.0",
+        "sass-loader": "^13.3.2",
+        "style-loader": "^3.3.3",
+        "webpack": "^5.86.0",
         "webpack-cli": "^4.10.0",
         "webpack-dev-server": "^4.7.3"
     }
