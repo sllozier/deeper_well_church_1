@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Account, Order, Product, Post } = require("../db");
+const { Account, Order, Product, Post, Event } = require("../db");
 const { isAdmin, requireToken } = require("./gatekeeper");
 
 router.get("/", async (req, res, next) => {
@@ -37,8 +37,7 @@ router.delete("/:id", async (req, res, next) => {
 router.put("/:id", async (req, res, next) => {
   try {
     const updatedAdmin = await Account.findByPk(req.params.id);
-    await updatedAdmin.update(req.body);
-    res.send(updatedAdmin);
+    res.send(await updatedAdmin.update(req.body));
   } catch (error) {
     next(error);
   }
@@ -78,8 +77,7 @@ router.post("/:id/posts", async (req, res, next) => {
 router.put("/:id/posts/:postId", async (req, res, next) => {
   try {
     const updatedPost = await Post.findByPk(req.params.postId);
-    await updatedPost.update(req.body);
-    res.send(updatedPost);
+    res.send(await updatedPost.update(req.body));
   } catch (error) {
     next(error);
   }
@@ -145,8 +143,7 @@ router.delete("/:id/users/:userId", async (req, res, next) => {
 router.put("/:id/users/:userId", async (req, res, next) => {
   try {
     const updatedUser = await Account.findByPk(req.params.userId);
-    await updatedUser.update(req.body);
-    res.send(updatedUser);
+    res.send(await updatedUser.update(req.body));
   } catch (error) {
     next(error);
   }
@@ -203,8 +200,7 @@ router.delete("/:id/writers/:writerId", async (req, res, next) => {
 router.put("/:id/writers/:writerId", async (req, res, next) => {
   try {
     const updatedWriter = await Account.findByPk(req.params.writerId);
-    await updatedWriter.update(req.body);
-    res.send(updatedWriter);
+    res.send(await updatedWriter.update(req.body));
   } catch (error) {
     next(error);
   }
@@ -289,8 +285,7 @@ router.delete("/:id/products/:productId", async (req, res, next) => {
 router.put("/:id/products/:productId", async (req, res, next) => {
   try {
     const updatedProduct = await Product.findByPk(req.params.productId);
-    await updatedProduct.update(req.body);
-    res.send(updatedProduct);
+    res.send(await updatedProduct.update(req.body));
   } catch (error) {
     next(error);
   }
@@ -336,8 +331,53 @@ router.delete("/:id/orders/:orderId", async (req, res, next) => {
 router.put("/:id/orders/:orderId", async (req, res, next) => {
   try {
     const updatedOrder = await Order.findByPk(req.params.orderId);
-    await updatedOrder.update(req.body);
-    res.send(updatedOrder);
+    res.send(await updatedOrder.update(req.body));
+  } catch (error) {
+    next(error);
+  }
+});
+
+//Admin-event routes
+router.get("/:id/events", async (req, res, next) => {
+  try {
+    const eventList = await Event.findAll();
+    res.send(eventList);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/:id/events/:eventId", async (req, res, next) => {
+  try {
+    const singleEvent = await Event.findByPk(req.params.eventId);
+    res.send(singleEvent);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/:id/events", async (req, res, next) => {
+  try {
+    const addEvent = await Event.create(req.body);
+    res.send(addEvent);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete("/:id/events/:eventId", async (req, res, next) => {
+  try {
+    const deletedEvent = await Event.findByPk(req.params.eventId);
+    await deletedEvent.destroy();
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/:id/events/:eventId", async (req, res, next) => {
+  try {
+    const updatedEvent = await Event.findByPk(req.params.eventId);
+    res.send(await updatedEvent.update(req.body));
   } catch (error) {
     next(error);
   }

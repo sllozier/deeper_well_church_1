@@ -19,6 +19,8 @@ const adminSlice = createSlice({
     productData: {},
     orderList: [],
     orderData: {},
+    eventList: [],
+    eventData: {},
   },
   reducers: {
     getAdminList: (state, action) => {
@@ -47,7 +49,7 @@ const adminSlice = createSlice({
         state.userList.push(action.payload);
         return state;
       },
-    _deleteUserData: (state, action) => {
+    _deleteUser: (state, action) => {
       state.userList = state.userList.filter(
         (user) => user.id !== action.payload.id
       );
@@ -57,7 +59,7 @@ const adminSlice = createSlice({
       state.writerList = action.payload;
       return state;
     },
-    getWriterData: (state, action) => {
+    getWriter: (state, action) => {
       state.writerData = action.payload;
       return state;
     },
@@ -65,7 +67,7 @@ const adminSlice = createSlice({
         state.writerList.push(action.payload);
         return state;
       },
-    _deleteWriterData: (state, action) => {
+    _deleteWriter: (state, action) => {
       state.writerList = state.writerList.filter(
         (writer) => writer.id !== action.payload.id
       );
@@ -83,7 +85,7 @@ const adminSlice = createSlice({
       state.postList.push(action.payload);
       return state;
     },
-    _deletePostData: (state, action) => {
+    _deletePost: (state, action) => {
       state.postList = state.postList.filter(
         (post) => post.id !== action.payload.id
       );
@@ -97,7 +99,7 @@ const adminSlice = createSlice({
       state.writerPostData = action.payload;
       return state;
     },
-    _deleteWriterPostData: (state, action) => {
+    _deleteWriterPost: (state, action) => {
       state.writerPostList = state.writerPostList.filter(
         (writerPost) => writerPost.id !== action.payload.id
       );
@@ -139,6 +141,24 @@ const adminSlice = createSlice({
       );
       return state;
     },
+    getEventList: (state, action) => {
+      state.eventList = action.payload;
+      return state;
+    },
+    getEventData: (state, action) => {
+      state.eventData = action.payload;
+      return state;
+    },
+    _addEvent: (state, action) => {
+      state.eventList.push(action.payload);
+      return state;
+    },
+    _deleteEvent: (state, action) => {
+      state.eventList = state.eventList.filter(
+        (event) => event.id !== action.payload.id
+      );
+      return state;
+    },
     setErrorMsg: (state, action) => {
       return action.payload;
     },
@@ -161,18 +181,22 @@ export const {
   getUserList,
   getWriterData,
   getWriterList,
-  _deleteAdminData,
-  _deleteWriterPostData,
+  getEventData,
+  getEventList,
+  _deleteAdmin,
+  _deleteWriterPost,
   _deleteOrder,
-  _deletePostData,
+  _deletePost,
   _deleteProduct,
-  _deleteUserData,
-  _deleteWriterData,
+  _deleteUser,
+  _deleteWriter,
+  _deleteEvent,
   _addPost,
   _addProduct,
   _addOrder,
   _addUser,
   _addWriter,
+  _addEvent,
   setErrorMsg,
 } = adminSlice.actions;
 
@@ -215,7 +239,7 @@ export const updateAdminData = (adminInfo, adminId) => async (dispatch) => {
 export const deleteAdminData = (adminId) => async (dispatch) => {
   try {
     const { data } = await axios.delete(`/api/admins/${adminId}`);
-    dispatch(_deleteAdminData(data));
+    dispatch(_deleteAdmin(data));
     dispatch(logout());
   } catch (error) {
     console.log("FETCH ADMIN DATA ERROR", error);
@@ -273,7 +297,7 @@ export const deletePostData = (adminId, postId) => async (dispatch) => {
     const { data } = await axios.delete(
       `/api/admins/${adminId}/posts/${postId}`
     );
-    dispatch(_deletePostData(data));
+    dispatch(_deletePost(data));
   } catch (error) {
     console.log("DELETE POST DATA ERROR", error);
   }
@@ -311,7 +335,7 @@ export const updateWriterPostData = (postInfo, adminId, postId) => async (dispat
 export const deleteWriterPostData = (adminId, postId) => async (dispatch) => {
   try {
     const { data } = await axios.delete(`/api/admins/${adminId}/approvePosts/${postId}`);
-    dispatch(_deleteWriterPostData(data));
+    dispatch(_deleteWriterPost(data));
   } catch (error) {
     console.log("DELETE WRITER POST ERROR", error);
   }
@@ -354,7 +378,7 @@ export const addUser = (newUser, adminId) => async(dispatch) => {
 export const deleteUserData = (adminId, userId) => async (dispatch) => {
   try {
     const { data } = await axios.delete(`/api/admins/${adminId}/users/${userId}`);
-    dispatch(_deleteUserData(data));
+    dispatch(_deleteUser(data));
   } catch (error) {
     console.log("FETCH ADMIN LIST ERROR", error);
   }
@@ -396,7 +420,7 @@ export const addWriter = (newWriter, adminId) => async(dispatch) => {
 export const deleteWriterData = (adminId, writerId) => async (dispatch) => {
   try {
     const { data } = await axios.delete(`/api/admins/${adminId}/writers/${writerId}`);
-    dispatch(_deleteWriterData(data));
+    dispatch(_deleteWriter(data));
   } catch (error) {
     console.log("DELETE WRITER ERROR", error);
   }
@@ -482,6 +506,50 @@ export const deleteOrderData = (adminId, orderId) => async (dispatch) => {
   try {
     const { data } = await axios.delete(`/api/admins/${adminId}/orders/${orderId}`);
     dispatch(_deleteOrder(data));
+  } catch (error) {
+    console.log("DELETE ORDER ERROR", error);
+  }
+};
+
+
+//Events
+
+export const fetchEventList = (adminId) => async (dispatch) => {
+  try {
+    const { data } = await axios.get(`/api/admins/${adminId}/events`, {});
+    dispatch(getEventList(data));
+  } catch (error) {
+    console.log("FETCH ORDER LIST ERROR", error);
+  }
+};
+export const fetchEventData = (adminId, eventId) => async (dispatch) => {
+  try {
+    const { data } = await axios.get(`/api/admins/${adminId}/events/${eventId}`, adminId,);
+    dispatch(getEventData(data));
+  } catch (error) {
+    console.log("FETCH ORDER DATA ERROR", error);
+  }
+};
+export const updateEventData = (eventInfo, adminId, eventId) => async (dispatch) => {
+  try {
+    const { data } = await axios.put(`/api/admins/${adminId}/events/${eventId}`, orderInfo, adminId, orderId);
+    dispatch(getEventData(data));
+  } catch (error) {
+    console.log("UPDATE ORDER ERROR", error);
+  }
+};
+export const addEvent = (newEvent, adminId) => async (dispatch) => {
+  try {
+    const { data } = await axios.post(`/api/admins/${adminId}/events`, newEvent, adminId);
+    dispatch(_addEvent(data));
+  } catch (error) {
+    console.log("ADD ORDER ERROR", error);
+  }
+};
+export const deleteEventData = (adminId, eventId) => async (dispatch) => {
+  try {
+    const { data } = await axios.delete(`/api/admins/${adminId}/events/${eventId}`);
+    dispatch(_deleteEvent(data));
   } catch (error) {
     console.log("DELETE ORDER ERROR", error);
   }
