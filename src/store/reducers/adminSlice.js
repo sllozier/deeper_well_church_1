@@ -139,6 +139,9 @@ const adminSlice = createSlice({
       );
       return state;
     },
+    setErrorMsg: (state, action) => {
+      return action.payload;
+    },
   },
 });
 
@@ -170,6 +173,7 @@ export const {
   _addOrder,
   _addUser,
   _addWriter,
+  setErrorMsg,
 } = adminSlice.actions;
 
 //Admin Info
@@ -407,14 +411,18 @@ export const fetchProductList = (adminId) => async (dispatch) => {
     console.log("FETCH PRODUCT LIST ERROR", error);
   }
 };
-export const fetchProductData = () => async (dispatch) => {
+export const fetchProductData = (adminId, productId) => async (dispatch) => {
   try {
+    const { data } = await axios.get(`/api/admins/${adminId}/products/${productId}`, adminId, productId);
+    dispatch(getProductData(data));
   } catch (error) {
     console.log("FETCH PRODUCT DATA ERROR", error);
   }
 };
-export const updateProductData = () => async (dispatch) => {
+export const updateProductData = (productInfo, adminId, productId) => async (dispatch) => {
   try {
+    const { data } = await axios.put(`/api/admins/${adminId}/products/${productId}`, productInfo, adminId, productId);
+    dispatch(getProductData(data));
   } catch (error) {
     console.log("UPDATE PRODUCT ERROR", error);
   }
@@ -422,39 +430,59 @@ export const updateProductData = () => async (dispatch) => {
 
 export const addProduct = (newProduct, adminId) => async (dispatch) => {
     try {
+      const { data } = await axios.post(`/api/admins/${adminId}/products`, newProduct, adminId);
+      dispatch(_addProduct(data));
     } catch (error) {
       console.log("ADD PRODUCT ERROR", error);
     }
   };
-export const deleteProductData = () => async (dispatch) => {
+export const deleteProductData = (adminId, productId) => async (dispatch) => {
   try {
+    const { data } = await axios.delete(`/api/admins/${adminId}/products/${productId}`);
+    dispatch(_deleteProduct(data));
   } catch (error) {
     console.log("DELETE PRODUCT ERROR", error);
   }
 };
 
 //Orders
-export const fetchOrderList = () => async (dispatch) => {
+export const fetchOrderList = (adminId) => async (dispatch) => {
   try {
+    const { data } = await axios.get(`/api/admins/${adminId}/orders`, {});
+    dispatch(getOrderList(data));
   } catch (error) {
-    console.log("FETCH ADMIN LIST ERROR", error);
+    console.log("FETCH ORDER LIST ERROR", error);
   }
 };
-export const fetchOrderData = () => async (dispatch) => {
+export const fetchOrderData = (adminId, orderId) => async (dispatch) => {
   try {
+    const { data } = await axios.get(`/api/admins/${adminId}/orders/${orderId}`, adminId,);
+    dispatch(getOrderData(data));
   } catch (error) {
-    console.log("FETCH ADMIN LIST ERROR", error);
+    console.log("FETCH ORDER DATA ERROR", error);
   }
 };
-export const updateOrderData = () => async (dispatch) => {
+export const updateOrderData = (orderInfo, adminId, orderId) => async (dispatch) => {
   try {
+    const { data } = await axios.put(`/api/admins/${adminId}/orders/${orderId}`, orderInfo, adminId, orderId);
+    dispatch(getOrderData(data));
   } catch (error) {
-    console.log("FETCH ADMIN LIST ERROR", error);
+    console.log("UPDATE ORDER ERROR", error);
   }
 };
-export const deleteOrderData = () => async (dispatch) => {
+export const addOrder = (newOrder, adminId) => async (dispatch) => {
   try {
+    const { data } = await axios.post(`/api/admins/${adminId}/orders`, newOrder, adminId);
+    dispatch(_addOrder(data));
   } catch (error) {
-    console.log("FETCH ADMIN LIST ERROR", error);
+    console.log("ADD ORDER ERROR", error);
+  }
+};
+export const deleteOrderData = (adminId, orderId) => async (dispatch) => {
+  try {
+    const { data } = await axios.delete(`/api/admins/${adminId}/orders/${orderId}`);
+    dispatch(_deleteOrder(data));
+  } catch (error) {
+    console.log("DELETE ORDER ERROR", error);
   }
 };

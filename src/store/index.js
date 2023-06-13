@@ -3,6 +3,7 @@ import logger from "redux-logger";
 import userReducer from "./reducers/userSlice";
 import authReducer from "./reducers/authSlice";
 import writerReducer from "./reducers/writerSlice";
+import adminReducer from "./reducers/adminSlice";
 
 import {
   persistReducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   user: userReducer,
   writer: writerReducer,
+  admin: adminReducer,
 });
 
 const persistConfig = {

@@ -28,7 +28,8 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { getUserList, getUserData, _deleteUser } = userSlice.actions;
+export const { getUserList, getUserData, _deleteUser, setErrorMsg } =
+  userSlice.actions;
 
 //thunks go here//
 export const fetchUserList = () => {

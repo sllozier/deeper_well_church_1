@@ -28,7 +28,7 @@ const writerSlice = createSlice({
 });
 
 export default writerSlice.reducer;
-export const { getWriterList, getWriterData, _deleteWriter } =
+export const { getWriterList, getWriterData, _deleteWriter, setErrorMsg } =
   writerSlice.actions;
 
 //thunks go here
