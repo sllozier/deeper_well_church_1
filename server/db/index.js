@@ -24,8 +24,8 @@ Account.hasMany(Order);
 Order.belongsTo(Account);
 
 //POST
-Post.hasMany(Tag, { through: posttag });
-Tag.belongsTo(Post, { through: posttag });
+Post.belongsToMany(Tag, { through: "posttag" });
+Tag.belongsToMany(Post, { through: "posttag" });
 
 //ORDERS
 Product.belongsToMany(Order, { through: LineItem });

@@ -28,7 +28,7 @@ export const fetchAuthAccount = () => async (dispatch) => {
   try {
     const token = window.localStorage.getItem("token");
     if (token) {
-      const res = await axios.get("/auth", {
+      const res = await axios.get("/api/auth", {
         headers: {
           authorization: token,
         },
@@ -54,7 +54,7 @@ export const createAuthAccount = (authInfo) => async (dispatch) => {
   try {
     const res = await axios.post("/auth/signup", authInfo);
     window.localStorage.setItem("token".res.data.token);
-    dispatch(setAuth(user));
+    dispatch(setAuth(res.data));
   } catch (error) {
     console.log("CREATE AUTH ACCT ERROR", error);
   }

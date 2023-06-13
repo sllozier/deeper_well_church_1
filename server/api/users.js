@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const { Account } = require("../db");
-const { requireToken } = require("./gateKeeper");
+const { requireToken } = require("./gatekeeper");
 
 //Account routes
-router.get("/accounts", requireToken, async (req, res, next) => {
+router.get("/", requireToken, async (req, res, next) => {
   try {
     const accounts = await Account.findAll();
     res.send(accounts);
@@ -12,7 +12,7 @@ router.get("/accounts", requireToken, async (req, res, next) => {
   }
 });
 
-router.get("/accounts/:id", requireToken, async (req, res, next) => {
+router.get("/:id", requireToken, async (req, res, next) => {
   try {
     const account = await Account.findByPk(req.params.id);
     res.send(account);
@@ -21,9 +21,9 @@ router.get("/accounts/:id", requireToken, async (req, res, next) => {
   }
 });
 
-router.post("/accounts", async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
-    req.body.isAdmin = false;
+    req.body.userType = "USER";
     const account = await Account.create(req.body);
     res.send(account);
   } catch (error) {
@@ -31,7 +31,7 @@ router.post("/accounts", async (req, res, next) => {
   }
 });
 
-router.put("/accounts/:id", requireToken, async (req, res, next) => {
+router.put("/:id", requireToken, async (req, res, next) => {
   try {
     const account = await Account.findByPk(req.account.id);
     await account.update(req.body);
@@ -41,7 +41,7 @@ router.put("/accounts/:id", requireToken, async (req, res, next) => {
   }
 });
 
-router.delete("/accounts/:id", requireToken, async (req, res, next) => {
+router.delete("/:id", requireToken, async (req, res, next) => {
   try {
     const deleteAccount = await Account.findByPk(req.params.id);
     await deleteAccount.destroy();

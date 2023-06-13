@@ -27,7 +27,7 @@ const Event = db.define("event", {
   },
   pocEmail: {
     type: Sequelize.STRING,
-    allowNull: false,
+    // allowNull: false,
     validate: {
       isEmail: true,
       notEmpty: true,
@@ -35,7 +35,7 @@ const Event = db.define("event", {
   },
   pocPhone: {
     type: Sequelize.STRING,
-    allowNull: false,
+    // allowNull: false,
     validator: {
       validator: function (v) {
         return phoneValidation.test(v);

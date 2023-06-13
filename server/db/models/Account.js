@@ -118,6 +118,30 @@ const hashPassword = async function (account) {
   }
 };
 
+Account.findAdminPosts = async function (id) {
+  return this.findByPk(id, {
+    where: {
+      userType: "ADMIN",
+    },
+    include: {
+      model: Post,
+      as: "adminPost",
+    },
+  });
+};
+
+Account.findWriterPosts = async function (id) {
+  return this.findByPk(id, {
+    where: {
+      userType: "WRITER",
+    },
+    include: {
+      model: Post,
+      as: "writerPost",
+    },
+  });
+};
+
 Account.beforeCreate(hashPassword);
 Account.beforeUpdate(hashPassword);
 Account.beforeBulkCreate((accounts) => Promise.all(account.map(hashPassword)));

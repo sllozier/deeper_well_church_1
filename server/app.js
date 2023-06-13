@@ -13,7 +13,6 @@ app.use(morgan);
 //this is where some things should go
 
 app.use("/api", require("./api"));
-app.use("/auth", require("./auth"));
 
 app.use((req, res, next) => {
   if (path.extname(req.path).length > 0) {

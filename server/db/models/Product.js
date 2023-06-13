@@ -27,6 +27,12 @@ const Product = db.define("product", {
   category: {
     type: Sequelize.STRING,
   },
+  authorFirst: {
+    type: Sequelize.STRING,
+  },
+  authorLast: {
+    type: Sequelize.STRING,
+  },
 });
 
 Product.afterCreate(async (product) => {

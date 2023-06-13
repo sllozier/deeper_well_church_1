@@ -1,7 +1,8 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import logger from "redux-logger";
-import accountReducer from "./reducers/accountSlice";
+import userReducer from "./reducers/userSlice";
 import authReducer from "./reducers/authSlice";
+import writerReducer from "./reducers/writerSlice";
 
 import {
   persistReducer,
@@ -16,8 +17,9 @@ import {
 import storage from "redux-persist/lib/storage";
 
 const rootReducer = combineReducers({
-  account: accountReducer,
   auth: authReducer,
+  user: userReducer,
+  writer: writerReducer,
 });
 
 const persistConfig = {
