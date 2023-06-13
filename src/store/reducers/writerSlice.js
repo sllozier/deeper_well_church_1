@@ -7,6 +7,8 @@ const writerSlice = createSlice({
   initialState: {
     writerList: [],
     writerData: {},
+    postList: [],
+    postData: {},
   },
   reducers: {
     getWriterList: (state, action) => {
@@ -18,6 +20,24 @@ const writerSlice = createSlice({
     _deleteWriter: (state, action) => {
       state.writerList = state.writerList.filter(
         (writer) => writer.id !== action.payload.id
+      );
+      return state;
+    },
+    getPostList: (state, action) => {
+      state.postList = action.payload;
+      return state;
+    },
+    getPostData: (state, action) => {
+      state.postData = action.payload;
+      return state;
+    },
+    _addPost: (state, action) => {
+      state.postList.push(action.payload);
+      return state;
+    },
+    _deletePost: (state, action) => {
+      state.postList = state.postList.filter(
+        (post) => post.id !== action.payload.id
       );
       return state;
     },
@@ -77,3 +97,5 @@ export const deleteWriterData = (writerId) => async (dispatch) => {
     console.log("DELETE WRITER ERROR", error);
   }
 };
+
+//Writer Posts

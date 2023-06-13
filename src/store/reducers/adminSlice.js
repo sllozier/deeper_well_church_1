@@ -304,9 +304,9 @@ export const deletePostData = (adminId, postId) => async (dispatch) => {
 };
 
 //Writer Posts
-export const fetchWriterPostList = (adminId) => async (dispatch) => {
+export const fetchWriterPostList = (adminId, writerId) => async (dispatch) => {
   try {
-    const { data } = await axios.get(`/api/admins/${adminId}/approvePosts`, {});
+    const { data } = await axios.get(`/api/admins/${adminId}/approvePosts}`, adminId, writerId);
     dispatch(getWriterPostList(data));
   } catch (error) {
     console.log("FETCH WRITER POST LIST ERROR", error);

@@ -46,7 +46,7 @@ router.put("/:id", async (req, res, next) => {
 //Admin-Post routes
 router.get("/:id/posts", async (req, res, next) => {
   try {
-    const postList = await Post.findAdminPosts(req.params.id);
+    const postList = await Account.findAdminPosts(req.params.id);
     res.send(postList);
   } catch (error) {
     next(error);
