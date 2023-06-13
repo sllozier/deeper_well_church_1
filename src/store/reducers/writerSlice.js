@@ -48,8 +48,16 @@ const writerSlice = createSlice({
 });
 
 export default writerSlice.reducer;
-export const { getWriterList, getWriterData, _deleteWriter, setErrorMsg } =
-  writerSlice.actions;
+export const {
+  getWriterList,
+  getWriterData,
+  getPostList,
+  getPostData,
+  _addPost,
+  _deleteWriter,
+  _deletePost,
+  setErrorMsg,
+} = writerSlice.actions;
 
 //thunks go here
 export const fetchWriterList = () => async (dispatch) => {
@@ -99,3 +107,63 @@ export const deleteWriterData = (writerId) => async (dispatch) => {
 };
 
 //Writer Posts
+
+export const fetchPostList = (writerId) => async (dispatch) => {
+  try {
+    const { data } = await axios.get(`/api/writers/${writerId}/posts`, {});
+    dispatch(getPostList(data));
+  } catch (error) {
+    console.log("FETCH WRITERS ERROR", error);
+  }
+};
+
+export const fetchPostData = (writerId, postId) => async (dispatch) => {
+  try {
+    const { data } = await axios.get(
+      `/api/writers/${writerId}/posts/${postId}`,
+      writerId,
+      postId
+    );
+    dispatch(getPostData(data));
+  } catch (error) {
+    console.log("FETCH WRITERS ERROR", error);
+  }
+};
+
+export const addPost = (newPost, writerId) => async (dispatch) => {
+  try {
+    const { data } = await axios.post(
+      `/api/writers/${writerId}/posts`,
+      newPost
+    );
+    dispatch(_addPost(data));
+  } catch (error) {
+    console.log("FETCH WRITERS ERROR", error);
+  }
+};
+
+export const updatePostData =
+  (postInfo, writerId, postId) => async (dispatch) => {
+    try {
+      const { data } = await axios.put(
+        `/api/writers/${writerId}/posts/${postId}`,
+        postInfo,
+        writerId,
+        postId
+      );
+      dispatch(getPostData(data));
+    } catch (error) {
+      console.log("FETCH WRITERS ERROR", error);
+    }
+  };
+
+export const deletePost = (writerId, postId) => async (dispatch) => {
+  try {
+    const { data } = await axios.delete(
+      `/api/writers/${writerId}/posts/${postId}`
+    );
+    dispatch(_deletePost(data));
+  } catch (error) {
+    console.log("FETCH WRITERS ERROR", error);
+  }
+};

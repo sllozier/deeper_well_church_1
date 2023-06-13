@@ -7,17 +7,39 @@ const userSlice = createSlice({
   initialState: {
     userList: [],
     userData: {},
+    commentList: [],
+    commentData: {},
   },
   reducers: {
     getUserList: (state, action) => {
-      return action.payload;
+      state.userList = action.payload;
+      return state;
     },
     getUserData: (state, action) => {
-      return action.payload;
+      state.userData = action.payload;
+      return state;
     },
     _deleteUser: (state, action) => {
       state.userList = state.userList.filter(
         (user) => user.id !== action.payload.id
+      );
+      return state;
+    },
+    getCommentList: (state, action) => {
+      state.commentList = action.payload;
+      return state;
+    },
+    getCommentData: (state, action) => {
+      state.stateData = action.payload;
+      return state;
+    },
+    _addComment: (state, action) => {
+      state.commentList.push(action.payload);
+      return state;
+    },
+    _deleteComment: (state, action) => {
+      state.commentList = state.commentList.filter(
+        (comment) => comment.id !== action.payload.id
       );
       return state;
     },
@@ -28,8 +50,16 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { getUserList, getUserData, _deleteUser, setErrorMsg } =
-  userSlice.actions;
+export const {
+  getUserList,
+  getUserData,
+  getCommentList,
+  getCommentData,
+  _addComment,
+  _deleteComment,
+  _deleteUser,
+  setErrorMsg,
+} = userSlice.actions;
 
 //thunks go here//
 export const fetchUserList = () => {
@@ -73,5 +103,68 @@ export const deleteUserData = (userId) => async (dispatch) => {
     dispatch(logout());
   } catch (error) {
     console.log("DELETE ACCOUNT DATA ERROR", error);
+  }
+};
+
+//comments
+
+export const fetchCommentList = (userId) => async (dispatch) => {
+  try {
+    const { data } = await axios.get(`/api/users/${userId}/comments`, {});
+    dispatch(getCommentList(data));
+  } catch (error) {
+    console.log("", error);
+  }
+};
+
+export const fetchCommentData = (userId, commentId) => async (dispatch) => {
+  try {
+    const { data } = await axios.get(
+      `/api/users/${userId}/comments/${commentId}`,
+      userId,
+      commentId
+    );
+    dispatch(getCommentData(data));
+  } catch (error) {
+    console.log("", error);
+  }
+};
+
+export const addComment = (newComment, userId) => async (dispatch) => {
+  try {
+    const { data } = await axios.post(
+      `/api/users/${userId}/comments`,
+      newComment,
+      userId
+    );
+    dispatch(_addComment(data));
+  } catch (error) {
+    console.log("", error);
+  }
+};
+
+export const updateCommentData =
+  (commentInfo, userId, commentId) => async (dispatch) => {
+    try {
+      const { data } = await axios.put(
+        `/api/users/${userId}/comments/${commentId}`,
+        commentInfo,
+        userId,
+        commentId
+      );
+      dispatch(getCommentData(data));
+    } catch (error) {
+      console.log("", error);
+    }
+  };
+
+export const deleteComment = (userId, commentId) => async (dispatch) => {
+  try {
+    const { data } = await axios.delete(
+      `/api/users/${userId}/comments/${commentId}`
+    );
+    dispatch(_deleteComment(data));
+  } catch (error) {
+    console.log("", error);
   }
 };
