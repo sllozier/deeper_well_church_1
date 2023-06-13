@@ -4,6 +4,8 @@ import userReducer from "./reducers/userSlice";
 import authReducer from "./reducers/authSlice";
 import writerReducer from "./reducers/writerSlice";
 import adminReducer from "./reducers/adminSlice";
+import productReducer from "./reducers/productSlice";
+import cartReducer from "./reducers/cartSlice";
 
 import {
   persistReducer,
@@ -22,6 +24,8 @@ const rootReducer = combineReducers({
   user: userReducer,
   writer: writerReducer,
   admin: adminReducer,
+  product: productReducer,
+  cart: cartReducer,
 });
 
 const persistConfig = {
