@@ -9,6 +9,8 @@ const writerSlice = createSlice({
     writerData: {},
     postList: [],
     postData: {},
+    tagList: [],
+    tagData: {},
   },
   reducers: {
     getWriterList: (state, action) => {
@@ -41,6 +43,24 @@ const writerSlice = createSlice({
       );
       return state;
     },
+    getTagList: (state, action) => {
+      state.tagList = action.payload;
+      return state;
+    },
+    getTagData: (state, action) => {
+      state.tagData = action.payload;
+      return state;
+    },
+    _addTag: (state, action) => {
+      state.tagList.push(action.payload);
+      return state;
+    },
+    _deleteTag: (state, action) => {
+      state.tagList = state.tagList.filter(
+        (tag) => tag.id !== action.payload.id
+      );
+      return state;
+    },
     setErrorMsg: (state, action) => {
       return action.payload;
     },
@@ -53,9 +73,13 @@ export const {
   getWriterData,
   getPostList,
   getPostData,
+  getTagList,
+  getTagData,
+  _addTag,
   _addPost,
   _deleteWriter,
   _deletePost,
+  _deleteTag,
   setErrorMsg,
 } = writerSlice.actions;
 
@@ -165,5 +189,78 @@ export const deletePost = (writerId, postId) => async (dispatch) => {
     dispatch(_deletePost(data));
   } catch (error) {
     console.log("FETCH WRITERS ERROR", error);
+  }
+};
+
+//Tags
+
+export const fetchTagList = (writerId, postId) => async (dispatch) => {
+  try {
+    const { data } = await axios.get(
+      `/api/writers/${writerId}/posts/${postId}/tags`,
+      writerId,
+      postId
+    );
+    dispatch(getTagList(data));
+  } catch (error) {
+    console.log("", error);
+  }
+};
+
+export const fetchTagData = (writerId, postId, tagId) => async (dispatch) => {
+  try {
+    const { data } = await axios.get(
+      `/api/writers/${writerId}/posts/${postId}/tags/${tagId}`,
+      writerId,
+      postId,
+      tagId
+    );
+    dispatch(getTagData(data));
+  } catch (error) {
+    console.log("", error);
+  }
+};
+
+export const addTag = (newTag, writerId, postId) => async (dispatch) => {
+  try {
+    const { data } = await axios.post(
+      `/api/writers/${writerId}/posts/${postId}/tags`,
+      newTag,
+      writerId,
+      postId
+    );
+    dispatch(_addTag(data));
+  } catch (error) {
+    console.log("", error);
+  }
+};
+
+export const updateTag =
+  (tagInfo, writerId, postId, tagId) => async (dispatch) => {
+    try {
+      const { data } = await axios.put(
+        `/api/writers/${writerId}/posts/${postId}/tags/${tagId}`,
+        tagInfo,
+        writerId,
+        postId,
+        tagId
+      );
+      dispatch(getTagData(data));
+    } catch (error) {
+      console.log("", error);
+    }
+  };
+
+export const deleteTag = (writerId, postId, tagId) => async (dispatch) => {
+  try {
+    const { data } = await axios.delete(
+      `/api/writers/${writerId}/posts/${postId}/tags/${tagId}`,
+      writerId,
+      postId,
+      tagId
+    );
+    dispatch(_deleteTag(data));
+  } catch (error) {
+    console.log("", error);
   }
 };

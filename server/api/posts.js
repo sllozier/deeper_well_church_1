@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Post, Comment } = require("../db");
+const { Post, Comment, Tag } = require("../db");
 const { isWriter, requireToken } = require("./gatekeeper");
 
 router.get("/", async (req, res, next) => {
@@ -76,4 +76,52 @@ router.get("/:id/comments/:commentId", async (req, res, next) => {
   }
 });
 
+//Post Tags
+router.get("/:id/tags", async (req, res, next) => {
+  try {
+    const tagList = await Tag.findAll({
+      where: {
+        postId: req.params.id,
+      },
+    });
+    res.send(tagList);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/:id/tags/:tagId", async (req, res, next) => {
+  try {
+    const singleTag = await Tag.findByPk(req.params.tagId, {
+      where: {
+        postId: req.params.id,
+      },
+    });
+    res.send(singleTag);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/:id/tags", async (req, res, next) => {
+  try {
+    const newTag = await Tag.create({
+      where: {
+        postId: req.params.id,
+      },
+    });
+    res.send(newTag);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete(":/id/tags/:tagId", async (req, res, next) => {
+  try {
+    const deletedTag = await Tag.findByPk(req.params.tagId);
+    await deletedTag.destroy();
+  } catch (error) {
+    next(error);
+  }
+});
 module.exports = router;

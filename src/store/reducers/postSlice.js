@@ -8,6 +8,7 @@ const postSlice = createSlice({
     postData: {},
     commentList: [],
     commentData: {},
+    tagList: [],
   },
   reducers: {
     getPostList: (state, action) => {
@@ -26,6 +27,10 @@ const postSlice = createSlice({
       state.commentData = action.payload;
       return state;
     },
+    getTagList: (state, action) => {
+      state.tagList = action.payload;
+      return state;
+    },
     setErrorMsg: (state, action) => {
       state.errorMsg = action.payload;
       return state;
@@ -39,6 +44,7 @@ export const {
   getPostData,
   getCommentList,
   getCommentData,
+  getTagList,
   setErrorMsg,
 } = postSlice.actions;
 
@@ -81,3 +87,5 @@ export const fetchCommentData = (postId, commentId) => async (dispatch) => {
     console.log("", error);
   }
 };
+
+//Tags
